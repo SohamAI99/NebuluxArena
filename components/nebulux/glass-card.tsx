@@ -57,11 +57,25 @@ export function GlassCard({
   return (
     <div
       style={containerStyle}
-      className="relative isolate [contain:layout_style] transition-transform duration-[var(--duration)] ease-[var(--easing)] will-change-transform"
+      className="relative isolate [contain:layout_style] transition-transform duration-[var(--duration)] ease-[var(--easing)] will-change-transform card-3d tilt-3d"
       ref={refElement}
       onPointerMove={(event) => {
-        const rotateFactor = 0.2
         const rect = event.currentTarget.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        const centerX = rect.width / 2
+        const centerY = rect.height / 2
+        
+        // Calculate 3D tilt based on mouse position
+        const rotateX = (y - centerY) / 8
+        const rotateY = (centerX - x) / 8
+        
+        // Update 3D tilt variables
+        event.currentTarget.style.setProperty('--tilt-x', `${Math.max(-12, Math.min(12, rotateX))}deg`)
+        event.currentTarget.style.setProperty('--tilt-y', `${Math.max(-12, Math.min(12, rotateY))}deg`)
+        
+        // Original glass card spotlight logic
+        const rotateFactor = 0.2
         const position = {
           x: event.clientX - rect.left,
           y: event.clientY - rect.top,
@@ -103,6 +117,9 @@ export function GlassCard({
           refElement.current.style.removeProperty("--duration")
           refElement.current?.style.setProperty("--r-x", `0deg`)
           refElement.current?.style.setProperty("--r-y", `0deg`)
+          // Reset 3D tilt
+          refElement.current?.style.setProperty("--tilt-x", `0deg`)
+          refElement.current?.style.setProperty("--tilt-y", `0deg`)
         }
       }}
     >

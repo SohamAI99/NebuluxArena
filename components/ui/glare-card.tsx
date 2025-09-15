@@ -67,11 +67,25 @@ export const GlareCard = ({
   return (
     <div
       style={containerStyle}
-      className="relative isolate [contain:layout_style] [perspective:600px] transition-transform duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] will-change-transform w-[320px] [aspect-ratio:17/21]"
+      className="relative isolate [contain:layout_style] [perspective:600px] transition-transform duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] will-change-transform w-[320px] [aspect-ratio:17/21] card-3d tilt-3d"
       ref={refElement}
       onPointerMove={(event) => {
-        const rotateFactor = 0.4;
         const rect = event.currentTarget.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Calculate 3D tilt
+        const rotateX = (y - centerY) / 8;
+        const rotateY = (centerX - x) / 8;
+        
+        // Update 3D tilt variables
+        event.currentTarget.style.setProperty('--tilt-x', `${Math.max(-15, Math.min(15, rotateX))}deg`);
+        event.currentTarget.style.setProperty('--tilt-y', `${Math.max(-15, Math.min(15, rotateY))}deg`);
+        
+        // Original glare card logic
+        const rotateFactor = 0.4;
         const position = {
           x: event.clientX - rect.left,
           y: event.clientY - rect.top,
@@ -113,6 +127,9 @@ export const GlareCard = ({
           refElement.current.style.removeProperty("--duration");
           refElement.current?.style.setProperty("--r-x", `0deg`);
           refElement.current?.style.setProperty("--r-y", `0deg`);
+          // Reset 3D tilt
+          refElement.current?.style.setProperty("--tilt-x", `0deg`);
+          refElement.current?.style.setProperty("--tilt-y", `0deg`);
         }
       }}
     >

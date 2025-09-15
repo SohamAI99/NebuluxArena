@@ -2,7 +2,7 @@ import { GlareCard } from "@/components/ui/glare-card";
 
 export default function GlareCardDemo() {
   return (
-    <GlareCard className="flex flex-col items-center justify-center">
+    <GlareCard className="flex flex-col items-center justify-center wobble-hover">
       <svg
         width="66"
         height="65"

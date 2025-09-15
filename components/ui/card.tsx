@@ -3,13 +3,34 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    
+    const rotateX = (y - centerY) / 10
+    const rotateY = (centerX - x) / 10
+    
+    e.currentTarget.style.setProperty('--tilt-x', `${Math.max(-10, Math.min(10, rotateX))}deg`)
+    e.currentTarget.style.setProperty('--tilt-y', `${Math.max(-10, Math.min(10, rotateY))}deg`)
+  }
+  
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.setProperty('--tilt-x', '0deg')
+    e.currentTarget.style.setProperty('--tilt-y', '0deg')
+  }
+  
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm card-3d tilt-3d",
         className
       )}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       {...props}
     />
   )

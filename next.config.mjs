@@ -4,10 +4,19 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     unoptimized: true,
+  },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        ignored: /node_modules/,
+      };
+    }
+    return config;
   },
 }
 

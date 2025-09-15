@@ -8,15 +8,35 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 export function NeonButton({ className, variant = "primary", children, ...props }: Props) {
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    
+    const rotateX = (y - centerY) / 15
+    const rotateY = (centerX - x) / 15
+    
+    e.currentTarget.style.setProperty('--tilt-x', `${Math.max(-6, Math.min(6, rotateX))}deg`)
+    e.currentTarget.style.setProperty('--tilt-y', `${Math.max(-6, Math.min(6, rotateY))}deg`)
+  }
+  
+  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.style.setProperty('--tilt-x', '0deg')
+    e.currentTarget.style.setProperty('--tilt-y', '0deg')
+  }
   if (variant === "glass") {
     return (
       <button
         className={cn(
           "group relative inline-flex items-center justify-center rounded-xl px-12 py-6 text-2xl font-semibold text-white",
           "bg-white/[0.06] backdrop-blur-xl border border-white/15",
-          "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
+          "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] card-3d tilt-3d",
           className,
         )}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         {...props}
       >
         <span className="relative z-10">{children}</span>
@@ -54,9 +74,11 @@ export function NeonButton({ className, variant = "primary", children, ...props 
           "group relative inline-flex items-center justify-center rounded-full px-14 py-6 text-2xl font-semibold text-white",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-white",
           "transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-[0.98]",
-          "is-disabled:opacity-60 is-disabled:cursor-not-allowed",
+          "is-disabled:opacity-60 is-disabled:cursor-not-allowed card-3d tilt-3d",
           className,
         )}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         {...props}
       >
         {/* animated conic gradient border */}
@@ -105,9 +127,11 @@ export function NeonButton({ className, variant = "primary", children, ...props 
         variant === "primary"
           ? "border border-white/40 hover:border-white/80 text-white"
           : "border border-white/30 hover:border-white/70 text-white/90",
-        "is-disabled:opacity-60 is-disabled:cursor-not-allowed",
+        "is-disabled:opacity-60 is-disabled:cursor-not-allowed card-3d tilt-3d",
         className,
       )}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       {...props}
     >
       <span className="relative z-10 pixel-text">{children}</span>

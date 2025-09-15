@@ -46,6 +46,7 @@ const flipVariants = {
 
 export default function Page() {
   const [loaded, setLoaded] = useState(false)
+  const [showContent, setShowContent] = useState(false)
   const reduce = useReducedMotion()
   const { scrollY } = useScroll()
   const parallaxY = useTransform(scrollY, [0, 400], [0, -24])
@@ -53,9 +54,13 @@ export default function Page() {
   useEffect(() => {
     function onLoad() {
       setLoaded(true)
+      // Delay content appearance for smooth transition
+      setTimeout(() => {
+        setShowContent(true)
+      }, 1000) // 1s delay after preloader starts fading
     }
     if (document.readyState === "complete") {
-      setLoaded(true)
+      onLoad()
     } else {
       window.addEventListener("load", onLoad, { once: true })
     }
@@ -128,8 +133,10 @@ export default function Page() {
       <main
         id="hero"
         className={cn(
-          "relative z-10 transition-opacity motion-safe:transition-transform duration-700 ease-out",
-          loaded ? "opacity-100 motion-safe:translate-y-0" : "opacity-0 motion-safe:translate-y-2",
+          "relative z-10 transition-all duration-1000 ease-out",
+          showContent 
+            ? "opacity-100 translate-y-0 scale-100 blur-0" 
+            : "opacity-0 translate-y-8 scale-95 blur-sm",
         )}
       >
         {/* Hero */}
@@ -351,8 +358,27 @@ function Section({
 }
 
 function CollabCard({ title, desc }: { title: string; desc: string; index: number }) {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    
+    const rotateX = (y - centerY) / 10
+    const rotateY = (centerX - x) / 10
+    
+    e.currentTarget.style.setProperty('--tilt-x', `${Math.max(-8, Math.min(8, rotateX))}deg`)
+    e.currentTarget.style.setProperty('--tilt-y', `${Math.max(-8, Math.min(8, rotateY))}deg`)
+  }
+  
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.setProperty('--tilt-x', '0deg')
+    e.currentTarget.style.setProperty('--tilt-y', '0deg')
+  }
+  
   return (
-    <div className="relative group">
+    <div className="relative group card-3d tilt-3d" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
       <GlassCard className="group p-6 md:p-7 aspect-square max-w-lg">
         <div className="flex h-full flex-col items-center justify-center text-center gap-2">
           <h3 className="font-jersey text-lg md:text-xl font-semibold text-white group-hover:glow-white">{title}</h3>
@@ -410,7 +436,7 @@ function ContactForm() {
           success ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
         )}
       >
-        <div className="rounded-lg border border-white/10 bg-black/70 px-4 py-3 shadow-[0_0_30px_-10px_rgba(0,255,128,0.5)] backdrop-blur-md">
+        <div className="rounded-lg border border-white/10 bg-black/70 px-4 py-3 shadow-[0_0_30px_-10px_rgba(0,255,128,0.5)] backdrop-blur-md wobble">
           <p className="text-sm">
             <span className="text-transparent bg-clip-text gradient-b font-medium">Thanks!</span> We’ll be in touch.
           </p>

@@ -63,15 +63,14 @@ export default function HeroVideoBg() {
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
       <video
         ref={videoRef}
-        className="h-full w-full object-cover opacity-35 motion-reduce:hidden"
-        src="/videos/nebulux-hero-bg.mp4"
+        className="h-full w-full object-cover opacity-100 motion-reduce:hidden"
+        src="/videos/NebuluxVideo.mp4"
         autoPlay
         muted
-        defaultMuted
         loop
         playsInline
         preload="auto"
-        poster="/nebulux-hero-video-placeholder.png"
+        poster="/aurena-hero-video-placeholder.png"
       />
 
       {/* scanlines */}
