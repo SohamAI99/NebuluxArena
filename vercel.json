@@ -10,7 +10,5 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ],
-  "installCommand": "pnpm install --no-frozen-lockfile --legacy-peer-deps --registry=https://registry.npmjs.org/",
-  "buildCommand": "pnpm build"
+  ]
 }
