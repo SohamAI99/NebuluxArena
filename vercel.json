@@ -10,7 +10,5 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ],
-  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm build",
-  "installCommand": "pnpm install --no-frozen-lockfile"
+  ]
 }
