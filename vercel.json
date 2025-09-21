@@ -11,9 +11,13 @@
   ],
   "routes": [
     {
+      "src": "/_next/static/(.*)",
+      "headers": { "cache-control": "public,max-age=31536000,immutable" },
+      "dest": "/_next/static/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/"
     }
-  ],
-  "outputDirectory": ".next/static"
+  ]
 }
