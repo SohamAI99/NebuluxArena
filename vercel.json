@@ -1,5 +1,15 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next",
+      "config": {
+        "includeFiles": ["next.config.mjs"],
+        "zeroConfig": true
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/_next/static/(.*)",
@@ -11,5 +21,7 @@
       "dest": "/"
     }
   ],
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.13.1",
+  "buildCommand": "pnpm install --no-frozen-lockfile && pnpm build",
+  "installCommand": "pnpm install --no-frozen-lockfile"
 }
