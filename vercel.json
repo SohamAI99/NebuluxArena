@@ -19,5 +19,6 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ]
+  ],
+  "packageManager": "pnpm@10.13.1"
 }
