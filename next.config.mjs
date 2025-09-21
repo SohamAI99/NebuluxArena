@@ -9,6 +9,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Add asset optimization
+  experimental: {
+    optimizeCss: true,
+  },
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {
