@@ -10,5 +10,7 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ]
+  ],
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install"
 }
