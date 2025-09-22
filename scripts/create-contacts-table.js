@@ -3,8 +3,9 @@
 // Script to create the contacts table in Supabase
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://cyiacmjrqdrbkxnafikp.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYkt4bmFmaWtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMjEwMTcsImV4cCI6MjA3Mjc5NzAxN30.dYDmOXt8ltZECBqCLFVEyvAQPTs6iEn1XEsyVSCVWlk';
+// Use environment variables or fallback to hardcoded values
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cyiacmjrqdrbkxnafikp.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYmt4bmFmaWtwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzIyMTAxNywiZXhwIjoyMDcyNzk3MDE3fQ.IoU38QrbD8zLW2oVrpA3jJkZZfTz8N7bX4nIh5b5J5Y';
 
 const sql = `
 -- Create contacts table for form submissions
@@ -42,6 +43,7 @@ async function createTable() {
   const supabase = createClient(supabaseUrl, supabaseKey);
   
   try {
+    // Try direct table creation first
     const { data, error } = await supabase.rpc('exec_sql', { sql_query: sql });
     
     if (error) {

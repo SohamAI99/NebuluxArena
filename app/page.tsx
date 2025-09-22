@@ -10,6 +10,7 @@ import { Countdown } from "@/components/nebulux/countdown"
 // import { PartnersMarquee } from "@/components/nebulux/partners-marquee"
 import { Preloader } from "@/components/nebulux/preloader"
 import HeroVideoBg from "@/components/nebulux/hero-video-bg"
+import { supabase } from '@/lib/supabase'
 
 const nav = [
   { href: "#collabs", label: "Collabs" },
@@ -422,11 +423,29 @@ function ContactForm() {
     }
     if (!validate()) return
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 900))
-    setLoading(false)
-    setSuccess(true)
-    setForm({ name: "", email: "", message: "", notify: true, company: "" })
-    setTimeout(() => setSuccess(false), 3000)
+    
+    try {
+      // Save to Supabase
+      const { error } = await supabase
+        .from('contacts')
+        .insert({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          notify: form.notify
+        })
+
+      if (error) throw error
+      
+      setSuccess(true)
+      setForm({ name: "", email: "", message: "", notify: true, company: "" })
+    } catch (error) {
+      console.error('Error saving contact form:', error)
+      setErrors({ ...errors, message: "Failed to send message. Please try again." })
+    } finally {
+      setLoading(false)
+      setTimeout(() => setSuccess(false), 3000)
+    }
   }
 
   return (
