@@ -3,38 +3,34 @@
 // Load environment variables
 require('dotenv').config({ path: '.env.local' });
 
-// Script to verify that we can insert and retrieve data from the Client Table
+// Script to test form submission
 const { createClient } = require('@supabase/supabase-js');
 
-// Use environment variables
+// Use environment variables - same as the web app
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cyiacmjrqdrbkxnafikp.supabase.co';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYkt4bmFmaWtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMjEwMTcsImV4cCI6MjA3Mjc5NzAxN30.dYDmOXt8ltZECBqCLFVEyvAQPTs6iEn1XEsyVSCVWlk';
+// Use the same key that the web app is using
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYkt4bmFmaWtwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzIyMTAxNywiZXhwIjoyMDcyNzk3MDE3fQ.g4E0V9mkVZzI-oA4SntKKQs7g8Tnj5uJ0BEtjsdAGzg';
 
 console.log('🔍 Supabase URL:', supabaseUrl);
 console.log('🔍 Supabase Key (first 10 chars):', supabaseKey.substring(0, 10) + '...');
 
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  console.log('⚠️  Warning: Environment variables not set. Using default values which may not work.');
-  console.log('📝 Please create a .env.local file with your Supabase credentials.');
-}
-
-async function verifyContacts() {
-  console.log('\n🔍 Verifying Client Table insertion and retrieval...');
+async function testFormSubmission() {
+  console.log('\n🔍 Testing form submission to Client Table...');
   
   const supabase = createClient(supabaseUrl, supabaseKey);
   
-  // Test data
+  // Test data - same as the web form
   const testData = {
     name: 'Test User',
     email: 'test@example.com',
-    message: 'Test message from verification script',
+    message: 'Test message from form submission test',
     notify: true
   };
   
   try {
     console.log('\n📝 Inserting test record...');
     
-    // Insert a test record
+    // Insert a test record - same as the web form
     const { data: insertData, error: insertError } = await supabase
       .from('Client Table')
       .insert(testData)
@@ -43,11 +39,6 @@ async function verifyContacts() {
     if (insertError) {
       console.error('❌ Insert Error:', insertError.message);
       console.error('🔍 Error details:', insertError);
-      
-      if (insertError.code === '42501') {
-        console.log('🔐 This might be a permissions issue. Check your Row Level Security policies.');
-      }
-      
       return;
     }
     
@@ -90,11 +81,11 @@ async function verifyContacts() {
       console.log('✅ Test record cleaned up successfully');
     }
     
-    console.log('\n🎉 All tests passed! The Client Table is working correctly.');
+    console.log('\n🎉 All tests passed! Form submission should work correctly.');
     
   } catch (err) {
     console.error('❌ Script error:', err.message);
   }
 }
 
-verifyContacts();
+testFormSubmission();

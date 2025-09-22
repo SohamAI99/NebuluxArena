@@ -427,7 +427,7 @@ function ContactForm() {
     try {
       // Save to Supabase
       const { error } = await (supabase as any)
-        .from('Client')
+        .from('Client Table')
         .insert({
           name: form.name,
           email: form.email,

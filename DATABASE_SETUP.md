@@ -1,6 +1,6 @@
 # Database Setup for Contact Form
 
-The contact form has been updated to save submissions to Supabase, but you need to create the `Client` table first.
+The contact form has been updated to save submissions to Supabase, but you need to create the `Client Table` table first.
 
 ## 🔧 Environment Setup
 
@@ -14,15 +14,20 @@ Before creating the table, you need to set up your Supabase credentials:
 2. Get your Supabase credentials:
    - Go to your Supabase project: https://supabase.com/dashboard/project/cyiacmjrqdrbkxnafikp
    - Navigate to **Settings > API**
-   - Copy the **Project URL** and **anon key**
+   - Copy the **Project URL**, **anon key**, and **service role key**
 
 3. Update `.env.local` with your credentials:
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_actual_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_actual_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_actual_service_role_key
    ```
 
-4. Restart your development server:
+4. **Important Key Differences**:
+   - **Anon Key**: Used for client-side operations (public access). Labeled as "Project API Keys" with role "anon" in your dashboard.
+   - **Service Role Key**: Used for server-side operations (admin access). Labeled as "Service Role Secret" in your dashboard.
+
+5. Restart your development server:
    ```bash
    pnpm dev
    ```
@@ -37,8 +42,8 @@ Before creating the table, you need to set up your Supabase credentials:
 4. Copy and paste this SQL:
 
 ```sql
--- Create Client table for form submissions
-CREATE TABLE IF NOT EXISTS "Client" (
+-- Create Client Table for form submissions
+CREATE TABLE IF NOT EXISTS "Client Table" (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -49,18 +54,18 @@ CREATE TABLE IF NOT EXISTS "Client" (
 );
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_client_email ON "Client"(email);
-CREATE INDEX IF NOT EXISTS idx_client_created_at ON "Client"(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_client_email ON "Client Table"(email);
+CREATE INDEX IF NOT EXISTS idx_client_created_at ON "Client Table"(created_at DESC);
 
 -- Enable Row Level Security
-ALTER TABLE "Client" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Client Table" ENABLE ROW LEVEL SECURITY;
 
 -- Allow anyone to insert contact forms (public submissions)
-CREATE POLICY "Anyone can submit contact forms" ON "Client"
+CREATE POLICY "Anyone can submit contact forms" ON "Client Table"
   FOR INSERT WITH CHECK (true);
 
 -- Allow authenticated users to read contacts (for admin access)
-CREATE POLICY "Authenticated users can read contacts" ON "Client"
+CREATE POLICY "Authenticated users can read contacts" ON "Client Table"
   FOR SELECT USING (auth.role() = 'authenticated');
 ```
 
@@ -71,7 +76,7 @@ CREATE POLICY "Authenticated users can read contacts" ON "Client"
 
 1. Go to **Table Editor** in your Supabase dashboard
 2. Click **"Create a new table"**
-3. Set table name: `Client`
+3. Set table name: `Client Table`
 4. Add these columns:
    - `id` (uuid, primary key, default: `gen_random_uuid()`)
    - `name` (text, not null)
@@ -83,18 +88,18 @@ CREATE POLICY "Authenticated users can read contacts" ON "Client"
 
 ## ✅ Test the Contact Form
 
-1. Go to your website: http://localhost:3002
+1. Go to your website: http://localhost:3001
 2. Scroll down to the "Contact Us" section
 3. Fill out the form and submit
 4. You should see "Thanks! We'll be in touch." message
-5. Check your Supabase dashboard under **Table Editor > Client** to see the submission
+5. Check your Supabase dashboard under **Table Editor > Client Table** to see the submission
 
 ## 🔍 View Submissions
 
 To view all contact form submissions:
 
 1. Go to **Table Editor** in Supabase dashboard
-2. Click on **Client** table
+2. Click on **Client Table** table
 3. You'll see all submissions with timestamps
 4. You can export data, edit entries, or delete spam
 
@@ -121,3 +126,17 @@ Visit `/test-db` in your application to verify:
 - Table existence
 - Insert permissions
 - Manual data insertion and viewing
+
+## 🔑 Troubleshooting API Keys
+
+If you're getting "Invalid API key" errors:
+
+1. Double-check that you're using the correct **anon key** (not the service role key) for client-side operations
+2. Ensure your anon key is from the "Project API Keys" section with role "anon"
+3. Make sure there are no extra spaces or characters in your keys
+4. Restart your development server after updating keys
+5. Test with the scripts in the `scripts/` directory:
+   ```bash
+   node scripts/test-anon-key.js
+   node scripts/test-service-role-key.js
+   ```

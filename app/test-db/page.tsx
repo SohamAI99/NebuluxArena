@@ -21,13 +21,13 @@ export default function TestDBPage() {
       try {
         // Test 1: Check if we can connect to Supabase
         const { data, error } = await (supabase as any)
-          .from('Client')
+          .from('Client Table')
           .select('count(*)')
           .limit(1)
 
         if (error) {
           if (error.code === '42P01') {
-            setStatus(`❌ Table 'Client' does not exist: ${error.message}`)
+            setStatus(`❌ Table 'Client Table' does not exist: ${error.message}`)
             setTableExists(false)
           } else {
             setStatus(`❌ Error accessing Supabase: ${error.message}`)
@@ -45,7 +45,7 @@ export default function TestDBPage() {
           }
           
           const { error: insertError } = await (supabase as any)
-            .from('Client')
+            .from('Client Table')
             .insert(testRecord)
             
           if (insertError) {
@@ -75,7 +75,7 @@ export default function TestDBPage() {
     
     try {
       const { error } = await (supabase as any)
-        .from('Client')
+        .from('Client Table')
         .insert(testData)
         
       if (error) {
@@ -104,7 +104,7 @@ export default function TestDBPage() {
   const fetchRecentRecords = async () => {
     try {
       const { data, error } = await (supabase as any)
-        .from('Client')
+        .from('Client Table')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(5)

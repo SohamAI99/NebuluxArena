@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Load environment variables
+require('dotenv').config({ path: '.env.local' });
+
 // Script to test if the contacts table exists in Supabase
 const { createClient } = require('@supabase/supabase-js');
 
