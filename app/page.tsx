@@ -206,6 +206,7 @@ export default function Page() {
           id="about"
           title="About Us"
           headingClassName="font-jersey text-center text-3xl md:text-4xl lg:text-5xl"
+          className="pt-32 sm:pt-40 md:pt-48"
         >
           <div className="mx-auto max-w-3xl text-center space-y-5">
             <p className="text-pretty text-base md:text-lg text-white/80">
@@ -319,16 +320,18 @@ function Section({
   id,
   title,
   headingClassName,
+  className,
   children,
 }: {
   id: string
   title: string
   headingClassName?: string
+  className?: string
   children: React.ReactNode
 }) {
   const reduce = useReducedMotion()
   return (
-    <section id={id} className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:py-24">
+    <section id={id} className={cn("relative z-10 mx-auto max-w-6xl px-4 py-16 sm:py-24", className)}>
       <motion.div
         variants={containerVariants}
         initial="hidden"
