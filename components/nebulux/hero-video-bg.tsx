@@ -1,77 +1,42 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import React from "react"
 import { useReducedMotion } from "framer-motion"
 
 export default function HeroVideoBg() {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
   const reduce = useReducedMotion()
 
-  useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-
-    if (reduce) {
-      // Respect reduced-motion: keep the overlays, but stop the video.
-      try {
-        v.pause()
-      } catch {}
-      return
-    }
-
-    const tryPlay = async () => {
-      if (!v) return
-      try {
-        // Ensure muted + inline for iOS autoplay
-        v.muted = true
-        ;(v as HTMLVideoElement).playsInline = true
-        if (v.readyState >= 2) {
-          await v.play()
-        } else {
-          v.load()
-          await v.play()
-        }
-      } catch {
-        // Autoplay blocked: will attempt again on first interaction or visibilitychange
-      }
-    }
-
-    const onCanPlay = () => void tryPlay()
-    const onInteract = () => void tryPlay()
-    const onVisibility = () => {
-      if (!document.hidden) void tryPlay()
-    }
-
-    v.addEventListener("canplay", onCanPlay, { once: true })
-    // Fallbacks if autoplay was blocked
-    window.addEventListener("pointerdown", onInteract, { once: true })
-    window.addEventListener("keydown", onInteract, { once: true })
-    document.addEventListener("visibilitychange", onVisibility)
-
-    // initial attempt
-    void tryPlay()
-
-    return () => {
-      v.removeEventListener("canplay", onCanPlay)
-      window.removeEventListener("pointerdown", onInteract)
-      window.removeEventListener("keydown", onInteract)
-      document.removeEventListener("visibilitychange", onVisibility)
-    }
-  }, [reduce])
+  // Vimeo video embed URL
+  const vimeoEmbedUrl = "https://player.vimeo.com/video/1118987600?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+  
+  // No useEffect needed for iframe approach
 
   return (
-    <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      <video
-        ref={videoRef}
-        className="h-full w-full object-cover opacity-100 motion-reduce:hidden"
-        src="/videos/NebuluxVideo.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        poster="/aurena-hero-video-placeholder.png"
-      />
+    <div className="pointer-events-none fixed inset-0 -z-10 w-screen h-screen overflow-hidden" aria-hidden="true">
+      {!reduce ? (
+        <iframe
+          className="absolute inset-0 w-full h-full opacity-100"
+          src={vimeoEmbedUrl}
+          frameBorder="0"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title="Nebulux Hero Video"
+          style={{
+            pointerEvents: 'none',
+            width: '100vw',
+            height: '100vh',
+            objectFit: 'cover',
+            transform: 'scale(1.1)',
+            transformOrigin: 'center center'
+          }}
+        />
+      ) : (
+        // Static background for reduced motion users
+        <div 
+          className="h-full w-full bg-cover bg-center bg-no-repeat opacity-100"
+          style={{ backgroundImage: 'url(/aurena-hero-video-placeholder.png)' }}
+        />
+      )}
 
       {/* scanlines */}
       <div className="absolute inset-0 hero-scanlines opacity-25 mix-blend-overlay motion-reduce:hidden" />
