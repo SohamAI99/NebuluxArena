@@ -18,7 +18,7 @@ Last deployed: Fixed CSS optimization issues by removing experimental.optimizeCs
 1. Create a Supabase project at [https://supabase.com](https://supabase.com)
 2. Copy your project URL and anon key from Settings > API
 3. Update `.env.local` with your credentials
-4. Create the contacts table using the SQL from `DATABASE_SETUP.md`
+4. Create the Client table using the SQL from `DATABASE_SETUP.md`
 
 ## Testing
 

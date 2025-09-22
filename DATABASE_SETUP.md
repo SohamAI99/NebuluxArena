@@ -1,6 +1,6 @@
 # Database Setup for Contact Form
 
-The contact form has been updated to save submissions to Supabase, but you need to create the `contacts` table first.
+The contact form has been updated to save submissions to Supabase, but you need to create the `Client` table first.
 
 ## 🔧 Environment Setup
 
@@ -27,7 +27,7 @@ Before creating the table, you need to set up your Supabase credentials:
    pnpm dev
    ```
 
-## 🗄️ Create the Contacts Table
+## 🗄️ Create the Client Table
 
 ### Method 1: Using Supabase Dashboard (Recommended)
 
@@ -37,8 +37,8 @@ Before creating the table, you need to set up your Supabase credentials:
 4. Copy and paste this SQL:
 
 ```sql
--- Create contacts table for form submissions
-CREATE TABLE IF NOT EXISTS contacts (
+-- Create Client table for form submissions
+CREATE TABLE IF NOT EXISTS "Client" (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -49,18 +49,18 @@ CREATE TABLE IF NOT EXISTS contacts (
 );
 
 -- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_contacts_email ON contacts(email);
-CREATE INDEX IF NOT EXISTS idx_contacts_created_at ON contacts(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_client_email ON "Client"(email);
+CREATE INDEX IF NOT EXISTS idx_client_created_at ON "Client"(created_at DESC);
 
 -- Enable Row Level Security
-ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Client" ENABLE ROW LEVEL SECURITY;
 
 -- Allow anyone to insert contact forms (public submissions)
-CREATE POLICY "Anyone can submit contact forms" ON contacts
+CREATE POLICY "Anyone can submit contact forms" ON "Client"
   FOR INSERT WITH CHECK (true);
 
 -- Allow authenticated users to read contacts (for admin access)
-CREATE POLICY "Authenticated users can read contacts" ON contacts
+CREATE POLICY "Authenticated users can read contacts" ON "Client"
   FOR SELECT USING (auth.role() = 'authenticated');
 ```
 
@@ -71,7 +71,7 @@ CREATE POLICY "Authenticated users can read contacts" ON contacts
 
 1. Go to **Table Editor** in your Supabase dashboard
 2. Click **"Create a new table"**
-3. Set table name: `contacts`
+3. Set table name: `Client`
 4. Add these columns:
    - `id` (uuid, primary key, default: `gen_random_uuid()`)
    - `name` (text, not null)
@@ -87,14 +87,14 @@ CREATE POLICY "Authenticated users can read contacts" ON contacts
 2. Scroll down to the "Contact Us" section
 3. Fill out the form and submit
 4. You should see "Thanks! We'll be in touch." message
-5. Check your Supabase dashboard under **Table Editor > contacts** to see the submission
+5. Check your Supabase dashboard under **Table Editor > Client** to see the submission
 
 ## 🔍 View Submissions
 
 To view all contact form submissions:
 
 1. Go to **Table Editor** in Supabase dashboard
-2. Click on **contacts** table
+2. Click on **Client** table
 3. You'll see all submissions with timestamps
 4. You can export data, edit entries, or delete spam
 

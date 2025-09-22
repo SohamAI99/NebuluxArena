@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-// Script to verify that we can insert and retrieve data from the contacts table
+// Script to verify that we can insert and retrieve data from the Client table
 const { createClient } = require('@supabase/supabase-js');
 
-// Use environment variables or default values
+// Use environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cyiacmjrqdrbkxnafikp.supabase.co';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYkt4bmFmaWtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMjEwMTcsImV4cCI6MjA3Mjc5NzAxN30.dYDmOXt8ltZECBqCLFVEyvAQPTs6iEn1XEsyVSCVWlk';
 
@@ -16,7 +16,7 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_A
 }
 
 async function verifyContacts() {
-  console.log('\n🔍 Verifying contacts table insertion and retrieval...');
+  console.log('\n🔍 Verifying Client table insertion and retrieval...');
   
   const supabase = createClient(supabaseUrl, supabaseKey);
   
@@ -33,7 +33,7 @@ async function verifyContacts() {
     
     // Insert a test record
     const { data: insertData, error: insertError } = await supabase
-      .from('contacts')
+      .from('Client')
       .insert(testData)
       .select();
     
@@ -54,7 +54,7 @@ async function verifyContacts() {
     // Retrieve the inserted record
     console.log('\n🔍 Retrieving inserted record...');
     const { data: selectData, error: selectError } = await supabase
-      .from('contacts')
+      .from('Client')
       .select('*')
       .eq('id', insertData[0].id)
       .single();
@@ -77,7 +77,7 @@ async function verifyContacts() {
     // Clean up: delete the test record
     console.log('\n🗑️ Cleaning up test record...');
     const { error: deleteError } = await supabase
-      .from('contacts')
+      .from('Client')
       .delete()
       .eq('id', insertData[0].id);
     
@@ -87,7 +87,7 @@ async function verifyContacts() {
       console.log('✅ Test record cleaned up successfully');
     }
     
-    console.log('\n🎉 All tests passed! The contacts table is working correctly.');
+    console.log('\n🎉 All tests passed! The Client table is working correctly.');
     
   } catch (err) {
     console.error('❌ Script error:', err.message);

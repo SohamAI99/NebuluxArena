@@ -20,14 +20,14 @@ export default function TestDBPage() {
     async function testConnection() {
       try {
         // Test 1: Check if we can connect to Supabase
-        const { data, error } = await supabase
-          .from('contacts')
+        const { data, error } = await (supabase as any)
+          .from('Client')
           .select('count(*)')
           .limit(1)
 
         if (error) {
           if (error.code === '42P01') {
-            setStatus(`❌ Table 'contacts' does not exist: ${error.message}`)
+            setStatus(`❌ Table 'Client' does not exist: ${error.message}`)
             setTableExists(false)
           } else {
             setStatus(`❌ Error accessing Supabase: ${error.message}`)
@@ -44,8 +44,8 @@ export default function TestDBPage() {
             notify: false
           }
           
-          const { error: insertError } = await supabase
-            .from('contacts')
+          const { error: insertError } = await (supabase as any)
+            .from('Client')
             .insert(testRecord)
             
           if (insertError) {
@@ -74,8 +74,8 @@ export default function TestDBPage() {
     setInsertStatus('Inserting...')
     
     try {
-      const { error } = await supabase
-        .from('contacts')
+      const { error } = await (supabase as any)
+        .from('Client')
         .insert(testData)
         
       if (error) {
@@ -103,8 +103,8 @@ export default function TestDBPage() {
 
   const fetchRecentRecords = async () => {
     try {
-      const { data, error } = await supabase
-        .from('contacts')
+      const { data, error } = await (supabase as any)
+        .from('Client')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(5)
@@ -134,7 +134,7 @@ export default function TestDBPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className={`bg-gray-900 rounded-lg p-6 ${tableExists ? 'border border-green-500' : 'border border-red-500'}`}>
             <h3 className="text-lg font-semibold mb-2">Table Status</h3>
-            <p>{tableExists ? '✅ Contacts table exists' : '❌ Contacts table missing'}</p>
+            <p>{tableExists ? '✅ Client table exists' : '❌ Client table missing'}</p>
           </div>
           
           <div className={`bg-gray-900 rounded-lg p-6 ${insertWorks ? 'border border-green-500' : 'border border-red-500'}`}>
@@ -236,9 +236,9 @@ export default function TestDBPage() {
           <h3 className="text-lg font-semibold mb-4">Next Steps</h3>
           <ul className="list-disc pl-5 space-y-2">
             {tableExists ? (
-              <li className="text-green-400">✅ Contacts table exists</li>
+              <li className="text-green-400">✅ Client table exists</li>
             ) : (
-              <li className="text-red-400">❌ Create the contacts table using the SQL from DATABASE_SETUP.md</li>
+              <li className="text-red-400">❌ Create the Client table in your Supabase dashboard</li>
             )}
             
             {insertWorks ? (
