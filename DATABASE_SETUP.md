@@ -2,6 +2,31 @@
 
 The contact form has been updated to save submissions to Supabase, but you need to create the `contacts` table first.
 
+## 🔧 Environment Setup
+
+Before creating the table, you need to set up your Supabase credentials:
+
+1. Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Get your Supabase credentials:
+   - Go to your Supabase project: https://supabase.com/dashboard/project/cyiacmjrqdrbkxnafikp
+   - Navigate to **Settings > API**
+   - Copy the **Project URL** and **anon key**
+
+3. Update `.env.local` with your credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_actual_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_actual_supabase_anon_key
+   ```
+
+4. Restart your development server:
+   ```bash
+   pnpm dev
+   ```
+
 ## 🗄️ Create the Contacts Table
 
 ### Method 1: Using Supabase Dashboard (Recommended)
@@ -88,3 +113,11 @@ Once the table is created, your contact form will automatically:
 - ✅ Clear the form after successful submission
 - ✅ Handle network errors gracefully
 - ✅ Provide spam protection
+
+## 🧪 Testing Database Connection
+
+Visit `/test-db` in your application to verify:
+- Database connection
+- Table existence
+- Insert permissions
+- Manual data insertion and viewing

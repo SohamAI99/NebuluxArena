@@ -439,9 +439,9 @@ function ContactForm() {
       
       setSuccess(true)
       setForm({ name: "", email: "", message: "", notify: true, company: "" })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving contact form:', error)
-      setErrors({ ...errors, message: "Failed to send message. Please try again." })
+      setErrors({ ...errors, message: `Failed to send message: ${error.message || 'Please try again.'}` })
     } finally {
       setLoading(false)
       setTimeout(() => setSuccess(false), 3000)
