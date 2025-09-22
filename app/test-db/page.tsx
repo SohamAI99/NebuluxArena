@@ -49,7 +49,11 @@ export default function TestDBPage() {
           }
         }
       } catch (err) {
-        setStatus(`❌ Unexpected error: ${err.message}`)
+        if (err instanceof Error) {
+          setStatus(`❌ Unexpected error: ${err.message}`)
+        } else {
+          setStatus(`❌ Unexpected error: ${String(err)}`)
+        }
       }
     }
 
