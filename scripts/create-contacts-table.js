@@ -3,9 +3,20 @@
 // Script to create the contacts table in Supabase
 const { createClient } = require('@supabase/supabase-js');
 
-// Use environment variables or fallback to hardcoded values
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cyiacmjrqdrbkxnafikp.supabase.co';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYmt4bmFmaWtwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzIyMTAxNywiZXhwIjoyMDcyNzk3MDE3fQ.IoU38QrbD8zLW2oVrpA3jJkZZfTz8N7bX4nIh5b5J5Y';
+// Load environment variables
+require('dotenv').config({ path: '.env.local' });
+
+// Use environment variables or fallback to placeholders
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'YOUR_SERVICE_ROLE_KEY_HERE';
+
+// Security check - ensure we're not using default keys in production
+if (supabaseKey === 'YOUR_SERVICE_ROLE_KEY_HERE') {
+  console.error('❌ ERROR: Supabase service role key not configured!');
+  console.error('Please set your Supabase keys in .env.local file');
+  console.error('Copy .env.example to .env.local and update the values');
+  process.exit(1);
+}
 
 const sql = `
 -- Create contacts table for form submissions

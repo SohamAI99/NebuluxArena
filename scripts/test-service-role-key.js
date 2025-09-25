@@ -1,8 +1,19 @@
 const { createClient } = require('@supabase/supabase-js');
 
-// Use the service role key for server-side operations
-const supabaseUrl = 'https://cyiacmjrqdrbkxnafikp.supabase.co';
-const supabaseServiceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYmt4bmFmaWtwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzIyMTAxNywiZXhwIjoyMDcyNzk3MDE3fQ.g4E0V9mkVZzI-oA4SntKKQs7g8Tnj5uJ0BEtjsdAGzg';
+// Load environment variables
+require('dotenv').config({ path: '.env.local' });
+
+// Use environment variables instead of hardcoded keys
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'YOUR_SERVICE_ROLE_KEY_HERE';
+
+// Security check - ensure we're not using default keys in production
+if (supabaseServiceRoleKey === 'YOUR_SERVICE_ROLE_KEY_HERE') {
+  console.error('❌ ERROR: Supabase service role key not configured!');
+  console.error('Please set your Supabase keys in .env.local file');
+  console.error('Copy .env.example to .env.local and update the values');
+  process.exit(1);
+}
 
 console.log('Testing Supabase connection with service role key...');
 console.log('Supabase URL:', supabaseUrl);

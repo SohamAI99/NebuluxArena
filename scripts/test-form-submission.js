@@ -7,9 +7,17 @@ require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 
 // Use environment variables - same as the web app
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cyiacmjrqdrbkxnafikp.supabase.co';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
 // Use the same key that the web app is using
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5aWFjbWpycWRyYkt4bmFmaWtwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzIyMTAxNywiZXhwIjoyMDcyNzk3MDE3fQ.g4E0V9mkVZzI-oA4SntKKQs7g8Tnj5uJ0BEtjsdAGzg';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_KEY_HERE';
+
+// Security check - ensure we're not using default keys in production
+if (supabaseKey === 'YOUR_SUPABASE_KEY_HERE') {
+  console.error('❌ ERROR: Supabase key not configured!');
+  console.error('Please set your Supabase keys in .env.local file');
+  console.error('Copy .env.example to .env.local and update the values');
+  process.exit(1);
+}
 
 console.log('🔍 Supabase URL:', supabaseUrl);
 console.log('🔍 Supabase Key (first 10 chars):', supabaseKey.substring(0, 10) + '...');
